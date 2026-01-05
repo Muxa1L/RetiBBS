@@ -76,9 +76,9 @@ class RetiBBSClient(App):
             DataTable(id="server_list", classes="server-list", cursor_type="row")
         )
         
-        address_tab = TabPane(title="Address Book", id="address_book")
+        address_tab = TabPane(title="Address Book", id="addresses")
         address_tab.compose_add_child(
-            DataTable(id="address_book", classes="address-book", cursor_type="row")
+            DataTable(id="address_list", classes="address-list", cursor_type="row")
         )
         
         tabs = TabbedContent(id="tabs", classes="tabs")
@@ -182,9 +182,9 @@ class RetiBBSClient(App):
         if not server_list.columns:
             server_list.add_columns("Server Name", "Destination Hash")
 
-        address_book = self.query_one("#address_book", DataTable)
-        if not address_book.columns:
-            address_book.add_columns("Server Name", "Destination Hash")
+        address_list = self.query_one("#address_list", DataTable)
+        if not address_list.columns:
+            address_list.add_columns("Server Name", "Destination Hash")
 
         if hasattr(self, "_deferred_debug_log"):
             for message in self._deferred_debug_log:
@@ -569,10 +569,10 @@ class RetiBBSClient(App):
     
     def update_address_book(self):
         try:
-            address_book = self.query_one("#address_book", DataTable)
-            address_book.clear()
+            address_list = self.query_one("#address_list", DataTable)
+            address_list.clear()
             for server in self.address_book.values():
-                address_book.add_row(server["display_name"], server["hash"])
+                address_list.add_row(server["display_name"], server["hash"])
                 #DEBUG: self.write_debug_log(f"[DEBUG] Added to address book: {server['display_name']} - {server['hash']}")
             #DEBUG: self.write_debug_log("[DEBUG] Address book updated successfully.")
         except Exception as e:
@@ -616,7 +616,7 @@ class RetiBBSClient(App):
                                 saved_in_address_book=destination_hash in self.address_book,
                             )
                         )
-            elif table_id == "address_book":
+            elif table_id == "address_list":
                 row_data = triggering_table.get_row(event.row_key)
                 if row_data:
                     server_name, destination_hash = row_data
