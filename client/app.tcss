@@ -44,7 +44,7 @@ Screen {
     border: round gray;
 }
 
-.address-book {
+.address-list {
     height: 1fr;
     border: round gray;
 }
