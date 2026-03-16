@@ -7,11 +7,13 @@ services:
     working_dir: /app/server
     command: >-
       sh -c "[ -f server_config.json ] || cp server_config.dist server_config.json;
-      python retibbs_server.py --config-file server_config.json --identity-file server_identity.pem"
+      mkdir -p /root/.reticulum/config;
+      python retibbs_server.py --reticulum-config /root/.reticulum/config --config-file server_config.json --identity-file server_identity.pem"
     stdin_open: true
     tty: true
     ports:
       - "5000:5000"
     volumes:
       - ./server:/app/server
+      - ./server/reticulum-config:/root/.reticulum/config
     restart: unless-stopped

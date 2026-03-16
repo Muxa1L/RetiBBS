@@ -58,6 +58,7 @@ docker compose up
 
 - The service runs from the `server/` directory.
 - Persistent files (identity, SQLite DBs, and LXMF storage) remain in `server/` on your host via a bind mount.
+- Reticulum config is mounted at `/root/.reticulum/config` in the container from `server/reticulum-config/` on your host.
 - On first start, `server_config.json` is created automatically from `server/server_config.dist` if missing.
 
 To enable the web interface in Docker, set in `server/server_config.json`:
