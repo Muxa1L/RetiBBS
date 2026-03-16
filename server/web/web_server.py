@@ -7,7 +7,7 @@ class WebServer:
         self.boards_manager = boards_manager
         self.server_name = server_name
 
-    def start(self, host="127.0.0.1", port=5000, debug=False):
+    def start(self, host="0.0.0.0", port=5000, debug=False):
         app.config["boards_manager"] = self.boards_manager
         app.config["server_name"] = self.server_name
         app.run(host=host, port=port)

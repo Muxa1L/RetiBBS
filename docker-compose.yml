@@ -1,0 +1,17 @@
+services:
+  retibbs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: retibbs
+    working_dir: /app/server
+    command: >-
+      sh -c "[ -f server_config.json ] || cp server_config.dist server_config.json;
+      python retibbs_server.py --config-file server_config.json --identity-file server_identity.pem"
+    stdin_open: true
+    tty: true
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./server:/app/server
+    restart: unless-stopped

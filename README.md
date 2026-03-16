@@ -47,6 +47,37 @@ pip install rns lxmf textual flask
 pip install gunicorn||uWSGI
 ```
 
+## Docker
+
+You can run the server with Docker Compose:
+
+```sh
+docker compose build
+docker compose up
+```
+
+- The service runs from the `server/` directory.
+- Persistent files (identity, SQLite DBs, and LXMF storage) remain in `server/` on your host via a bind mount.
+- On first start, `server_config.json` is created automatically from `server/server_config.dist` if missing.
+
+To enable the web interface in Docker, set in `server/server_config.json`:
+
+```json
+{
+  "enable_web_server": true,
+  "use_wsgi": false
+}
+```
+
+Then open `http://localhost:5000`.
+
+Useful commands:
+
+```sh
+docker compose logs -f
+docker compose down
+```
+
 ## Usage
 
 ### Running the Server

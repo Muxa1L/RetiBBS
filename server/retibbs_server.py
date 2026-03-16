@@ -3,6 +3,7 @@ import argparse
 import os
 import json
 import sys
+import time
 import threading
 
 import RNS
@@ -98,12 +99,22 @@ class RetiBBSServer:
     def run(self):
         if self.enable_web_server:
             self.start_web_server()
+        interactive_stdin = bool(sys.stdin and sys.stdin.isatty())
+        if not interactive_stdin:
+            RNS.log("[Server] No interactive stdin detected; running in passive mode.", RNS.LOG_INFO)
+
         while True:
             try:
-                RNS.log("[Server] Waiting for incoming connections... Press Enter to send an ANNOUNCE.", RNS.LOG_INFO)
-                input()
-                RNS.log("[Server] Sending manual announce...", RNS.LOG_INFO)
-                self.send_announce()
+                if interactive_stdin:
+                    RNS.log("[Server] Waiting for incoming connections... Press Enter to send an ANNOUNCE.", RNS.LOG_INFO)
+                    input()
+                    RNS.log("[Server] Sending manual announce...", RNS.LOG_INFO)
+                    self.send_announce()
+                else:
+                    time.sleep(1)
+            except EOFError:
+                interactive_stdin = False
+                RNS.log("[Server] Stdin closed; continuing in passive mode.", RNS.LOG_WARNING)
             except KeyboardInterrupt:
                 RNS.log("[Server] Keyboard interrupt received, shutting down...", RNS.LOG_INFO)
                 self.shutdown()
